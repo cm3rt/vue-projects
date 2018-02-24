@@ -1,40 +1,37 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <h1>{{ msg }}</h1>
     <h2>Computed</h2>
-    <input type="text" v-model="firstName"> <br />
-    <input type="text" id="surname" value="Alai"><br />
-    <button @click="saveName">Save Name</button><br />
-    <output>{{computedFullName}}</output><br />
-    <output>The surname is: {{surnameSnatched}}</output>
+    <label>Legs: <input type="text" v-model="legCount"></label><br />
+    <label>Tables: <input type="text" @input="update" :value="tableCount"></label><br />
+    <output>We are going to build {{legCount}} legs and {{tableCount}} tables.</output>
   </div>
 </template>
-
 <script>
-// var surname;
-let surname = 'Alai'
-
 export default {
   name: 'app',
   data () {
     return {
-      firstName: 'Joe',
       msg: 'Welcome to Your Vue.js App',
-      surnameSnatched: ''
+      legCount: 0
     }
   },
   computed: {
-    computedFullName() {
-      return this.firstName + ' ' + surname
-    }
+    tableCount: {
+      get(){
+        return this.legCount/4
+      },
+      set(newValue){ 
+        this.legCount = newValue * 4
+      }
+    },
   },
   methods: {
-    saveName () {
-      surname = this.$el.querySelector('#surname').value
-      this.surnameSnatched = surname;
+      update(e){
+        this.tableCount = e.target.value
+      }
     }
-  }
+  
 }
 </script>
 
