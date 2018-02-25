@@ -1,10 +1,10 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <h2>Computed</h2>
-    <label>Legs: <input type="text" v-model="legCount"></label><br />
-    <label>Tables: <input type="text" @input="update" :value="tableCount"></label><br />
-    <output>We are going to build {{legCount}} legs and {{tableCount}} tables.</output>
+    <h2>Computed Circle</h2>
+    <label>The radius: <input type="text" v-model="radius"></label><br />
+    <label>The area: <input type="text" @input="update" :value="getArea"></label><br />
+    <output>The radius is {{radius}} and the area is {{getArea}}</output>
   </div>
 </template>
 <script>
@@ -12,25 +12,25 @@ export default {
   name: 'app',
   data () {
     return {
-      msg: 'Welcome to Your Vue.js App',
-      legCount: 0
+        radius: 0,
     }
   },
   computed: {
-    tableCount: {
-      get(){
-        return this.legCount/4
+    getArea: {
+      get() {
+        return Math.PI * this.radius * this.radius
       },
-      set(newValue){ 
-        this.legCount = newValue * 4
-      }
-    },
-  },
-  methods: {
-      update(e){
-        this.tableCount = e.target.value
+      set (newValue) { 
+        this.radius = Math.sqrt(newValue / Math.PI) 
       }
     }
+  },
+  methods: {
+    update (e) {
+      this.getArea = e.target.value
+    }
+  }
+  
   
 }
 </script>
