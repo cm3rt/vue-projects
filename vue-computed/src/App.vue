@@ -1,10 +1,11 @@
 <template>
   <div id="app">
     <img src="./assets/logo.png">
-    <h2>Computed Circle</h2>
-    <label>The radius: <input type="text" v-model="radius"></label><br />
-    <label>The area: <input type="text" @input="update" :value="getArea"></label><br />
-    <output>The radius is {{radius}} and the area is {{getArea}}</output>
+    <h2>Cleantime Calculator Circle</h2>
+    <label>The days: <input type="text" v-model="days"></label><br />
+    <label>The years: <input type="text" @input="update" :value="getYears"></label><br />
+    <output>The days is {{days}} and the years is {{getYears}}</output><br />
+    <output>{{ getYears%365 != 0 ? (Math.trunc(getYears)) + " years " + " and " + (days%365) + " days." : ' Exactly.'}}</output>
   </div>
 </template>
 <script>
@@ -12,22 +13,22 @@ export default {
   name: 'app',
   data () {
     return {
-        radius: 0,
+        days: 0,
     }
   },
   computed: {
-    getArea: {
+    getYears: {
       get() {
-        return Math.PI * this.radius * this.radius
+        return this.days / 365
       },
       set (newValue) { 
-        this.radius = Math.sqrt(newValue / Math.PI) 
+        this.days = newValue * 365 
       }
     }
   },
   methods: {
     update (e) {
-      this.getArea = e.target.value
+      this.getYears = e.target.value
     }
   }
   
