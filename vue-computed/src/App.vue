@@ -5,22 +5,23 @@
     <p>The computed filter, in this instance, is called when we used the v-for function, small in ComputedFilteredArray</p>
     <p>If the 'in' is a computed function, it looks to that computed function.</p>
     <p>Inside the computed function, we return this.ACTUALARRAY.filter(small =><i>if</i>  small.type != 'Defined')</p>
+    <span>Price Cap: <input type="text" v-model="experimentPrice"></span>
     <h3>All</h3>
     <ul>
-      <li v-for="exp in experiments">{{exp.name + ': ' + exp.type}}</li>
+      <li v-for="exp in allExperiments">{{exp.name + ': ' + exp.type + '; $' + exp.price}}</li>
     </ul>
     <h3>Non Physics</h3>
     <ul>
-      <li v-for="exp in nonPhysics">{{exp.name + ': ' + exp.type}}</li>
+      <li v-for="exp in nonPhysics">{{exp.name + ': ' + exp.type + '; $' + exp.price}}</li>
     </ul>
     <h3>Non CS</h3>
     <ul>
-      <li v-for="exp in nonCS">{{exp.name + ': ' + exp.type}}</li>
+      <li v-for="exp in nonCS">{{exp.name + ': ' + exp.type + '; $' + exp.price}}</li>
     </ul>
     <h3>Custom</h3>
     <label>Input Custom Filter for Experiment Type: <input type="text" v-model="filterType"></label><br />
     <ul>
-      <li v-for="exp in customFilter">{{exp.name + ': ' + exp.type}}</li>
+      <li v-for="exp in customFilter">{{exp.name + ': ' + exp.type + '; $' + exp.price}}</li>
     </ul>
   </div>
 </template>
@@ -30,23 +31,30 @@ export default {
   data () {
     return {
         filterType: 'CS',
+        experimentPrice: 999999,
         experiments: [
-        { type: 'CS', name: 'Exp1'},
-        { type: 'CS', name: 'Exp1'},
-        { type: 'PHY', name: 'Exp3'},
-        { type: 'FS', name: 'Full Stack Experiment'},
+        { type: 'CS', name: 'Exp1', price: 86753.09},
+        { type: 'CS', name: 'Exp1', price: 1923.34},
+        { type: 'PHY', name: 'Exp3', price: 84.12},
+        { type: 'FS', name: 'Full Stack Experiment', price: 238.00},
         ],
     }
   },  
   computed: {
+    allExperiments(){
+      return this.experiments.filter(affordable => affordable.price <= this.experimentPrice)
+    },
     nonPhysics () {
-      return this.experiments.filter(smart => smart.type !== 'PHY')
+      return this.experiments.filter(smart => smart.type !== 'PHY').filter(affordable => affordable.price <= this.experimentPrice)
     },
     nonCS() {
-      return this.experiments.filter(dumb => dumb.type !== 'CS')
+      return this.experiments.filter(dumb => dumb.type !== 'CS').filter(affordable => affordable.price <= this.experimentPrice)
     },
     customFilter() {
-      return this.experiments.filter(custom => custom.type.search(this.filterType) > -1)
+      return this.experiments.filter(custom => custom.type.search(this.filterType) > -1).filter(affordable => affordable.price <= this.experimentPrice)
+    },
+    customPrice(){
+      return this.experiment.filter(custom => custom.price <= this.experimentPrice).filter(affordable => affordable.price <= this.experimentPrice)
     }
   }
 }
