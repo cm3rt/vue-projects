@@ -5,10 +5,22 @@
     <p>The computed filter, in this instance, is called when we used the v-for function, small in ComputedFilteredArray</p>
     <p>If the 'in' is a computed function, it looks to that computed function.</p>
     <p>Inside the computed function, we return this.ACTUALARRAY.filter(small =><i>if</i>  small.type != 'Defined')</p>
+    <h2>Add New Experiment</h2>
+    <h4>Please fill out the following form to add a new experiment</h4>
+    <label>
+      Experiment Type: 
+      <select v-model="newExperimentType">
+        <option v-for="exp in experimentsUnique">{{exp.type}}</option>
+      </select>
+      </label>
+    <label>Experiment Name: <input type="text" v-model="newExperimentName"></label>
+    <label>Experiment Price: <input type="text" v-model="newExperimentPrice"></label>
+    <button @click="addExperiment">Add Experiment</button><br />
+    <h2>Assets Filter</h2>
     <span>Price Cap: <input type="text" v-model="experimentPrice"></span>
     <h3>All</h3>
     <ul>
-      <li v-for="exp in allExperiments">{{exp.name + ': ' + exp.type + '; $' + exp.price}}</li>
+      <li v-for="exp in allExperiments">{{exp.name + ': ' + exp.type + '; $' + exp.price + ' lodash rnd: ' + _.random(2002)}}</li>
     </ul>
     <h3>Non Physics</h3>
     <ul>
@@ -32,6 +44,9 @@ export default {
     return {
         filterType: 'CS',
         experimentPrice: 999999,
+        newExperimentPrice: 0,
+        newExperimentName: '',
+        newExperimentType: '',
         experiments: [
         { type: 'CS', name: 'Exp1', price: 86753.09},
         { type: 'CS', name: 'Exp1', price: 1923.34},
@@ -51,10 +66,27 @@ export default {
       return this.experiments.filter(dumb => dumb.type !== 'CS').filter(affordable => affordable.price <= this.experimentPrice)
     },
     customFilter() {
-      return this.experiments.filter(custom => custom.type.search(this.filterType) > -1).filter(affordable => affordable.price <= this.experimentPrice)
+      return this.experiments.filter(custom => custom.type.search(_.toUpper(this.filterType)) > -1).filter(affordable => affordable.price <= this.experimentPrice)
     },
     customPrice(){
       return this.experiment.filter(custom => custom.price <= this.experimentPrice).filter(affordable => affordable.price <= this.experimentPrice)
+    },
+    experimentsUnique(){
+
+        var result = _.map(_.uniqBy(this.experiments, 'type'), function (item) {
+            return {
+                type: item.type
+            };  
+        });
+
+
+      return result
+    }
+  },
+  methods: {
+    addExperiment () {
+      var newExperiment = {type: this.newExperimentType, name: this.newExperimentName, price: this.newExperimentPrice}
+      this.experiments.push(newExperiment)
     }
   }
 }
@@ -81,7 +113,7 @@ ul {
 }
 
 li {
-  display: inline-block;
+  // display: inline-block;
   margin: 0 10px;
 }
 
